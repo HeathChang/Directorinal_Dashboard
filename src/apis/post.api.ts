@@ -15,15 +15,44 @@ apiClient.interceptors.request.use((config) => {
     return config;
 });
 
-// 게시글 목록 조회 (페이지네이션)
-export const getPostsApi = async (page: number = 1, limit: number = 10): Promise<{
-    data: iPostData[];
-    total: number;
-    page: number;
-    limit: number;
+// 게시글 목록 조회 (Cursor 기반 페이지네이션)
+export interface GetPostsParams {
+    nextCursor?: string | null;
+    prevCursor?: string | null;
+    limit?: number;
+    sort?: string;
+    order?: string;
+    category?: string;
+}
+
+export const getPostsApi = async (params: GetPostsParams): Promise<{
+    items: iPostData[];
+    nextCursor: string | null;
+    prevCursor: string | null;
 }> => {
+    const queryParams: Record<string, string | number> = {
+        limit: params.limit || 10
+    };
+
+    if (params.nextCursor) {
+        queryParams.nextCursor = params.nextCursor;
+    } else if (params.prevCursor) {
+        queryParams.prevCursor = params.prevCursor;
+    }
+
+    // sort, order, category 파라미터 추가
+    if (params.sort) {
+        queryParams.sort = params.sort;
+    }
+    if (params.order) {
+        queryParams.order = params.order;
+    }
+    if (params.category) {
+        queryParams.category = params.category;
+    }
+
     const response = await apiClient.get('/posts', {
-        params: { page, limit }
+        params: queryParams
     });
     return response.data;
 };
@@ -42,7 +71,7 @@ export const createPostApi = async (postData: iPostRequest): Promise<iPostData> 
 
 // 게시글 수정
 export const updatePostApi = async (id: string, postData: iPostRequest): Promise<iPostData> => {
-    const response = await apiClient.put(`/posts/${id}`, postData);
+    const response = await apiClient.patch(`/posts/${id}`, postData);
     return response.data;
 };
 

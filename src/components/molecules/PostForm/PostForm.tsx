@@ -192,7 +192,7 @@ export const PostForm: React.FC<PostFormProps> = ({
                         maxLength={POST_LIMITS.TAG_MAX_LENGTH}
                         className="flex-1"
                     />
-                    <Button type="button" onClick={handleAddTag} variant="outline">
+                    <Button type="button" onClick={handleAddTag} variant="outlined">
                         추가
                     </Button>
                 </div>
@@ -223,7 +223,7 @@ export const PostForm: React.FC<PostFormProps> = ({
                 <Button type="button" variant="outlined" size="small" onClick={onCancel} disabled={isLoading}>
                     취소
                 </Button>
-                <Button type="submit" variant="contained" size="small" isLoading={isLoading}>
+                <Button type="submit" variant="contained" size="small" loading={isLoading}>
                     {initialData ? '수정' : '작성'}
                 </Button>
             </div>

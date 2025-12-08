@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { IconFileText, IconLoader2 } from '@tabler/icons-react';
 import { Table, TableHead, TableBody } from '../../atoms/Table';
 import { TableColumnHeader } from '../../molecules/TableColumnHeader';
@@ -9,6 +9,7 @@ export interface PostTableProps {
     posts: iPostData[];
     columns: iColumnConfig[];
     isLoading?: boolean;
+    isFetchingNextPage?: boolean;
     onLoadMore?: () => void;
     hasMore?: boolean;
     onEdit?: (post: iPostData) => void;
@@ -23,6 +24,7 @@ export const PostTable: React.FC<PostTableProps> = ({
     posts,
     columns,
     isLoading = false,
+    isFetchingNextPage = false,
     onLoadMore,
     hasMore = false,
     onEdit,
@@ -38,7 +40,8 @@ export const PostTable: React.FC<PostTableProps> = ({
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
-                if (entries[0].isIntersecting && hasMore && !isLoading && onLoadMore) {
+                // 초기 로딩 중이 아니고, 다음 페이지를 가져오는 중이 아니고, 더 가져올 페이지가 있을 때만 요청
+                if (entries[0].isIntersecting && hasMore && !isLoading && !isFetchingNextPage && onLoadMore) {
                     onLoadMore();
                 }
             },
@@ -55,7 +58,7 @@ export const PostTable: React.FC<PostTableProps> = ({
                 observer.unobserve(currentTarget);
             }
         };
-    }, [hasMore, isLoading, onLoadMore]);
+    }, [hasMore, isLoading, isFetchingNextPage, onLoadMore]);
 
     const visibleColumns = columns.filter(col => col.visible);
 
@@ -70,7 +73,9 @@ export const PostTable: React.FC<PostTableProps> = ({
                                     key={column.id}
                                     column={column}
                                     onResize={onColumnResize}
-                                    onSort={onSort && (column.id === 'title' || column.id === 'createdAt') ? onSort : undefined}
+                                    onSort={onSort && (column.id === 'title' || column.id === 'createdAt')
+                                        ? (columnId: string) => onSort(columnId as PostSortField)
+                                        : undefined}
                                     sortField={sortField}
                                     sortOrder={sortOrder}
                                 />
@@ -96,11 +101,12 @@ export const PostTable: React.FC<PostTableProps> = ({
                                 </td>
                             </tr>
                         ) : (
-                            posts.map((post) => (
+                            posts.map((post, index) => (
                                 <PostRow
                                     key={post.id}
                                     post={post}
                                     columns={columns}
+                                    index={index}
                                     onEdit={onEdit}
                                     onDelete={onDelete}
                                 />
@@ -109,11 +115,11 @@ export const PostTable: React.FC<PostTableProps> = ({
                     </TableBody>
                 </Table>
             </div>
-            
+
             {/* 무한 스크롤 트리거 */}
             {hasMore && (
                 <div ref={observerTarget} className="h-12 flex items-center justify-center bg-gray-50 border-t border-gray-200">
-                    {isLoading && (
+                    {isFetchingNextPage && (
                         <div className="flex items-center gap-2 text-gray-500">
                             <IconLoader2 className="animate-spin h-5 w-5" />
                             <span>로딩 중...</span>

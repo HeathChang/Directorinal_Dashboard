@@ -1,31 +1,51 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getPostsApi } from '../apis/post.api';
-import type { iPostData } from '../types/general.type';
+import type { iPostData, PostCategory, PostSortField, PostSortOrder } from '../types/general.type';
 
 const POSTS_PER_PAGE = 10;
 
-export const usePosts = () => {
-    const { 
-        data: postsData, 
-        isLoading, 
-        fetchNextPage, 
-        hasNextPage, 
-        isFetchingNextPage 
+export interface UsePostsParams {
+    sortField?: PostSortField;
+    sortOrder?: PostSortOrder;
+    category?: PostCategory;
+}
+
+export const usePosts = (params?: UsePostsParams) => {
+    const {
+        data: postsData,
+        isLoading,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage
     } = useInfiniteQuery({
-        queryKey: ['posts'],
-        queryFn: ({ pageParam = 1 }) => getPostsApi(pageParam, POSTS_PER_PAGE),
-        getNextPageParam: (lastPage, allPages) => {
-            const totalPages = Math.ceil(lastPage.total / POSTS_PER_PAGE);
-            return allPages.length < totalPages ? allPages.length + 1 : undefined;
+        queryKey: ['posts', params?.sortField, params?.sortOrder, params?.category],
+        queryFn: ({ pageParam }) => {
+            return getPostsApi({
+                nextCursor: pageParam as string | null,
+                limit: POSTS_PER_PAGE,
+                sort: params?.sortField,
+                order: params?.sortOrder,
+                category: params?.category
+            });
         },
-        initialPageParam: 1
+        getNextPageParam: (lastPage) => {
+            if (lastPage.nextCursor && lastPage.nextCursor !== null) {
+                return lastPage.nextCursor;
+            }
+            return undefined;
+        },
+        initialPageParam: null as string | null
     });
 
     // 모든 페이지의 게시글을 하나의 배열로 합치기
     const allPosts: iPostData[] = [];
-    postsData?.pages.forEach(page => {
-        allPosts.push(...(page.data ?? []));
-    });
+    if (postsData?.pages) {
+        postsData.pages.forEach(page => {
+            if (page.items && Array.isArray(page.items)) {
+                allPosts.push(...page.items);
+            }
+        });
+    }
 
     return {
         posts: allPosts,

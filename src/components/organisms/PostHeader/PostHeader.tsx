@@ -17,7 +17,6 @@ export interface PostHeaderProps {
     onSortChange: (field: PostSortField, order: PostSortOrder) => void;
     onColumnSettingsClick: () => void;
     onCreatePostClick: () => void;
-    onLoginClick: () => void;
 }
 const categoryOptions: SelectOption[] = [
     { value: '', label: '전체' },
@@ -43,7 +42,6 @@ export const PostHeader: React.FC<PostHeaderProps> = ({
     sortField,
     sortOrder,
     onSortChange,
-    onLoginClick,
     onColumnSettingsClick,
     onCreatePostClick
 }) => {
@@ -58,11 +56,6 @@ export const PostHeader: React.FC<PostHeaderProps> = ({
                     <div className="flex gap-3">
                         <Button variant="outlined" onClick={onColumnSettingsClick} size="small" className='cursor-pointer'>
                             컬럼 설정
-                        </Button>
-                        <Button variant="outlined" onClick={onLoginClick} size="small" className='cursor-pointer'>
-                            <span className="flex items-center gap-2">
-                                로그인
-                            </span>
                         </Button>
                         <Button variant="contained" onClick={onCreatePostClick} size="small" className='cursor-pointer'>
                             <span className="flex items-center gap-2">

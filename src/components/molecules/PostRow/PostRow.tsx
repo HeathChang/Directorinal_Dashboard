@@ -6,6 +6,7 @@ import { Button } from '@mui/material';
 export interface PostRowProps {
     post: iPostData;
     columns: iColumnConfig[];
+    index?: number;
     onEdit?: (post: iPostData) => void;
     onDelete?: (postId: string) => void;
 }
@@ -13,6 +14,7 @@ export interface PostRowProps {
 export const PostRow: React.FC<PostRowProps> = ({
     post,
     columns,
+    index,
     onEdit,
     onDelete
 }) => {
@@ -31,6 +33,8 @@ export const PostRow: React.FC<PostRowProps> = ({
 
     const renderCellContent = (columnId: string) => {
         switch (columnId) {
+            case 'index':
+                return <span className="text-gray-600 font-medium">{index !== undefined ? index + 1 : ''}</span>;
             case 'id':
                 return <span className="font-mono text-xs">{post.id}</span>;
             case 'title':

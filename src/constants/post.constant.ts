@@ -9,7 +9,8 @@ export const POST_CATEGORY_OPTIONS: Array<{ value: PostCategory; label: string }
 
 // 게시글 테이블 기본 컬럼 설정
 export const DEFAULT_POST_COLUMNS = [
-    { id: 'id', label: 'ID', width: 200, visible: true, resizable: true },
+    { id: 'index', label: '순번', width: 80, visible: true, resizable: true },
+    { id: 'id', label: 'ID', width: 200, visible: false, resizable: true },
     { id: 'title', label: '제목', width: 300, visible: true, resizable: true },
     { id: 'category', label: '카테고리', width: 120, visible: true, resizable: true },
     { id: 'tags', label: '태그', width: 200, visible: true, resizable: true },

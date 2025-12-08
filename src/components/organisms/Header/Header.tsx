@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { useAuth } from '../../../hooks/useAuth';
 
 export const Header: React.FC = () => {
     const location = useLocation();
-    const { login, logout, isAuthenticated } = useAuth();
-    const [isLoggingIn, setIsLoggingIn] = useState(false);
+    const { login, isAuthenticated } = useAuth();
 
     const handleLogin = async () => {
-        setIsLoggingIn(true);
         try {
             const result = await login({
                 email: 'jannhyunsoo@gmail.com',
@@ -21,13 +19,7 @@ export const Header: React.FC = () => {
             }
         } catch (error) {
             console.error('로그인 오류:', error);
-        } finally {
-            setIsLoggingIn(false);
         }
-    };
-
-    const handleLogout = () => {
-        logout();
     };
 
     const isPostActive = location.pathname === '/post';
@@ -78,37 +70,21 @@ export const Header: React.FC = () => {
                             Chart
                         </Button>
 
-                        {/* 로그인/로그아웃 버튼 */}
-                        {isAuthenticated() ? (
-                            <Button
-                                variant="outlined"
-                                size="small"
-                                onClick={handleLogout}
-                                className="cursor-pointer"
-                                sx={{
-                                    textTransform: 'none',
-                                    fontWeight: 500,
-                                    minWidth: 80,
-                                }}
-                            >
-                                로그아웃
-                            </Button>
-                        ) : (
-                            <Button
-                                variant="contained"
-                                size="small"
-                                onClick={handleLogin}
-                                disabled={isLoggingIn}
-                                className="cursor-pointer"
-                                sx={{
-                                    textTransform: 'none',
-                                    fontWeight: 600,
-                                    minWidth: 80,
-                                }}
-                            >
-                                {isLoggingIn ? '로그인 중...' : '로그인'}
-                            </Button>
-                        )}
+                        {/* 로그인 버튼 */}
+                        <Button
+                            variant="contained"
+                            size="small"
+                            onClick={handleLogin}
+                            disabled={isAuthenticated}
+                            className="cursor-pointer"
+                            sx={{
+                                textTransform: 'none',
+                                fontWeight: 600,
+                                minWidth: 80,
+                            }}
+                        >
+                            로그인
+                        </Button>
                     </div>
                 </div>
             </div>
