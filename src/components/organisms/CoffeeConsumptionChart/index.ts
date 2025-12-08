@@ -1,0 +1,2 @@
+export { CoffeeConsumptionChart } from './CoffeeConsumptionChart';
+

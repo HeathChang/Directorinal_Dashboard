@@ -1,0 +1,2 @@
+export { SnackImpactChart } from './SnackImpactChart';
+

@@ -1,0 +1,2 @@
+export { PopularSnackBrandsChart } from './PopularSnackBrandsChart';
+

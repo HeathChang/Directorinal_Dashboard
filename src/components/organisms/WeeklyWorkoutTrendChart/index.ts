@@ -1,0 +1,2 @@
+export { WeeklyWorkoutTrendChart } from './WeeklyWorkoutTrendChart';
+

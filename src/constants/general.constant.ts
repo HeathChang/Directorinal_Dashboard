@@ -5,3 +5,5 @@ export const FORBIDDEN_WORD_FILTER = [
     '불법체류',
     '텔레그램'
 ];
+
+export const API_BASE_URL = 'https://fe-hiring-rest-api.vercel.app';
