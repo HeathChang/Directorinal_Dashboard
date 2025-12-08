@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSnackbar } from 'notistack';
 import { PostHeader } from '../../organisms/PostHeader';
 import { PostTable } from '../../organisms/PostTable';
@@ -22,6 +22,9 @@ export interface PostTemplateProps {
     sortField: PostSortField;
     sortOrder: PostSortOrder;
     onSortChange: (field: PostSortField, order: PostSortOrder) => void;
+    searchValue: string;
+    onSearchChange: (value: string) => void;
+    onSearch: () => void;
 }
 
 export const PostTemplate: React.FC<PostTemplateProps> = ({
@@ -38,7 +41,10 @@ export const PostTemplate: React.FC<PostTemplateProps> = ({
     onCategoryFilterChange,
     sortField,
     sortOrder,
-    onSortChange
+    onSortChange,
+    searchValue,
+    onSearchChange,
+    onSearch
 }) => {
     const { enqueueSnackbar } = useSnackbar();
 
@@ -69,8 +75,6 @@ export const PostTemplate: React.FC<PostTemplateProps> = ({
         return DEFAULT_POST_COLUMNS;
     });
 
-    const [searchValue, setSearchValue] = useState('');
-
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
     const [isColumnSettingsModalOpen, setIsColumnSettingsModalOpen] = useState(false);
     const [editingPost, setEditingPost] = useState<iPostData | undefined>();
@@ -79,17 +83,7 @@ export const PostTemplate: React.FC<PostTemplateProps> = ({
         localStorage.setItem('postColumns', JSON.stringify(columns));
     }, [columns]);
 
-    const filteredPosts = useMemo(() => {
-        if (!searchValue) {
-            return posts;
-        }
-
-        const searchLower = searchValue.toLowerCase();
-        return posts.filter(post =>
-            post.title.toLowerCase().includes(searchLower) ||
-            post.body.toLowerCase().includes(searchLower)
-        );
-    }, [posts, searchValue]);
+    const filteredPosts = posts;
 
     const handleTableSort = useCallback((field: PostSortField) => {
         const newOrder = sortField === field && sortOrder === 'asc' ? 'desc' : 'asc';
@@ -155,7 +149,8 @@ export const PostTemplate: React.FC<PostTemplateProps> = ({
             <div className="container mx-auto px-4 py-8 max-w-7xl">
                 <PostHeader
                     searchValue={searchValue}
-                    onSearchChange={setSearchValue}
+                    onSearchChange={onSearchChange}
+                    onSearch={onSearch}
                     categoryFilter={categoryFilter}
                     onCategoryFilterChange={onCategoryFilterChange}
                     sortField={sortField}

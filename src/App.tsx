@@ -5,7 +5,7 @@ import { Header } from './components/organisms/Header';
 
 function App() {
   return (
-    <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+    <SnackbarProvider maxSnack={1} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
       <BrowserRouter>
         <Header />
         <Router />

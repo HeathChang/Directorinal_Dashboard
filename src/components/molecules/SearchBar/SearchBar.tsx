@@ -5,6 +5,7 @@ import { Input } from '../../atoms/Input';
 export interface SearchBarProps {
     value: string;
     onChange: (value: string) => void;
+    onEnterPress?: () => void;
     placeholder?: string;
     className?: string;
 }
@@ -12,9 +13,16 @@ export interface SearchBarProps {
 export const SearchBar: React.FC<SearchBarProps> = ({
     value,
     onChange,
+    onEnterPress,
     placeholder = '검색어를 입력하세요...',
     className = ''
 }) => {
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter' && onEnterPress) {
+            onEnterPress();
+        }
+    };
+
     return (
         <div className={`w-full relative ${className}`}>
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -24,6 +32,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 type="text"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
+                onKeyPress={handleKeyPress}
                 placeholder={placeholder}
                 className="w-full pl-11"
             />

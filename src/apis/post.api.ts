@@ -22,13 +22,10 @@ export interface GetPostsParams {
     sort?: string;
     order?: string;
     category?: string;
+    search?: string;
 }
 
-export const getPostsApi = async (params: GetPostsParams): Promise<{
-    items: iPostData[];
-    nextCursor: string | null;
-    prevCursor: string | null;
-}> => {
+export const getPostsApi = async (params: GetPostsParams) => {
     if (localStorage.getItem('authToken') === null) {
         throw new Error('로그인이 필요합니다. 로그인해주세요.');
     }
@@ -50,6 +47,9 @@ export const getPostsApi = async (params: GetPostsParams): Promise<{
     }
     if (params.category) {
         queryParams.category = params.category;
+    }
+    if (params.search) {
+        queryParams.search = params.search;
     }
 
     const response = await apiClient.get('/posts', {

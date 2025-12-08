@@ -8,6 +8,7 @@ export interface UsePostsParams {
     sortField?: PostSortField;
     sortOrder?: PostSortOrder;
     category?: PostCategory;
+    search?: string;
 }
 
 export const usePosts = (params?: UsePostsParams) => {
@@ -18,14 +19,15 @@ export const usePosts = (params?: UsePostsParams) => {
         hasNextPage,
         isFetchingNextPage
     } = useInfiniteQuery({
-        queryKey: ['posts', params?.sortField, params?.sortOrder, params?.category],
+        queryKey: ['posts', params?.sortField, params?.sortOrder, params?.category, params?.search],
         queryFn: ({ pageParam }) => {
             return getPostsApi({
                 nextCursor: pageParam as string | null,
                 limit: POSTS_PER_PAGE,
                 sort: params?.sortField,
                 order: params?.sortOrder,
-                category: params?.category
+                category: params?.category,
+                search: params?.search
             });
         },
         getNextPageParam: (lastPage) => {
@@ -51,7 +53,6 @@ export const usePosts = (params?: UsePostsParams) => {
         isLoading,
         fetchNextPage,
         hasNextPage: hasNextPage || false,
-        isFetchingNextPage
+        isFetchingNextPage,
     };
 };
-

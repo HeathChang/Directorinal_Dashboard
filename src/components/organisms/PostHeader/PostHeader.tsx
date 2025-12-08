@@ -10,6 +10,7 @@ import { POST_CATEGORY_OPTIONS } from '../../../constants/post.constant';
 export interface PostHeaderProps {
     searchValue: string;
     onSearchChange: (value: string) => void;
+    onSearch: () => void;
     categoryFilter?: PostCategory;
     onCategoryFilterChange: (category?: PostCategory) => void;
     sortField: PostSortField;
@@ -37,6 +38,7 @@ const sortOrderOptions: SelectOption[] = [
 export const PostHeader: React.FC<PostHeaderProps> = ({
     searchValue,
     onSearchChange,
+    onSearch,
     categoryFilter,
     onCategoryFilterChange,
     sortField,
@@ -65,14 +67,15 @@ export const PostHeader: React.FC<PostHeaderProps> = ({
                         </Button>
 
                     </div>
-                    </div>
+                </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
                     <div className="md:col-span-2">
                         <SearchBar
                             value={searchValue}
                             onChange={onSearchChange}
                             placeholder="제목 또는 본문 검색..."
+                            onEnterPress={onSearch}
                         />
                     </div>
                     <div className="flex gap-2 h-full">
@@ -98,6 +101,16 @@ export const PostHeader: React.FC<PostHeaderProps> = ({
                             onChange={(e) => onSortChange(sortField, e.target.value as PostSortOrder)}
                             options={sortOrderOptions}
                         />
+                    </div>
+                    <div className="flex h-full w-[80px] ml-auto">
+                        <Button
+                            variant="contained"
+                            onClick={onSearch}
+                            size="small"
+                            className="h-full w-full cursor-pointer"
+                        >
+                            검색
+                        </Button>
                     </div>
                 </div>
             </div>
