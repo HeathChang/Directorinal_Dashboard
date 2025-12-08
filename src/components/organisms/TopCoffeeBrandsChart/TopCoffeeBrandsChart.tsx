@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
 import { Box } from '@mui/material';
 import { BarChart, DonutChart } from '../../molecules/charts';
 import type { iBarChartData } from '../../../types/chart.type';
@@ -11,12 +11,10 @@ interface TopCoffeeBrandsChartProps {
 }
 
 export const TopCoffeeBrandsChart: React.FC<TopCoffeeBrandsChartProps> = ({ data, loading = false }) => {
-    // 범례 상태 관리
     const [barLegendItems, setBarLegendItems] = useState(() => createInitialBarLegendItems(data));
     const [donutLegendItems, setDonutLegendItems] = useState(() => createInitialDonutLegendItems(data));
 
-    // 데이터 변경 시 범례 아이템 업데이트
-    React.useEffect(() => {
+    useEffect(() => {
         setBarLegendItems(createInitialBarLegendItems(data));
         setDonutLegendItems(createInitialDonutLegendItems(data));
     }, [data]);
