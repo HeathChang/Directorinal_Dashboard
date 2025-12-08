@@ -1,13 +1,6 @@
 import type { iMultiLineChartData, iLegendItem } from '../types/chart.type';
 import type { EChartsOption } from 'echarts';
-
-const getTeamColor = (index: number): string => {
-    const colors = [
-        '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de',
-        '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'
-    ];
-    return colors[index % colors.length];
-};
+import { getDefaultColor } from './chartUtils';
 
 interface CreateMultiLineChartOptionParams {
     data: iMultiLineChartData[];
@@ -68,7 +61,7 @@ export const createMultiLineChartOption = ({
 
     visibleNames.forEach(name => {
         const legendItem = legendItems.find(li => li.name === name);
-        const color = legendItem?.color || getTeamColor(names.indexOf(name));
+        const color = legendItem?.color || getDefaultColor(names.indexOf(name));
         const nameDataPoints = nameData[name];
 
         leftYAxisFields.forEach(field => {
@@ -219,7 +212,7 @@ export const createInitialLegendItems = (data: iMultiLineChartData[]): iLegendIt
     const nameArray = Array.from(nameSet);
     return nameArray.map((name, index) => ({
         name: name,
-        color: getTeamColor(index),
+        color: getDefaultColor(index),
         visible: true
     }));
 };

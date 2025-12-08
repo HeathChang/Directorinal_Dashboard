@@ -107,9 +107,6 @@ export const transformTechTeamCoffeeToMultiLineChart = (
     return result;
 };
 
-/**
- * Department Snack Impact API Response를 Multi-Line Chart Data로 변환
- */
 export const transformDepartmentSnackToMultiLineChart = (
     response: DepartmentSnackImpactDataResponse
 ): iMultiLineChartData[] => {

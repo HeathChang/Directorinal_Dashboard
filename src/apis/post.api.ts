@@ -29,6 +29,9 @@ export const getPostsApi = async (params: GetPostsParams): Promise<{
     nextCursor: string | null;
     prevCursor: string | null;
 }> => {
+    if (localStorage.getItem('authToken') === null) {
+        throw new Error('로그인이 필요합니다. 로그인해주세요.');
+    }
     const queryParams: Record<string, string | number> = {
         limit: params.limit || 10
     };
