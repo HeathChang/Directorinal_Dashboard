@@ -10,10 +10,10 @@ interface WeeklyWorkoutTrendChartProps {
     loading?: boolean;
 }
 
-export const WeeklyWorkoutTrendChart: React.FC<WeeklyWorkoutTrendChartProps> = ({ 
-    data, 
-    categories, 
-    loading = false 
+export const WeeklyWorkoutTrendChart: React.FC<WeeklyWorkoutTrendChartProps> = ({
+    data,
+    categories,
+    loading = false
 }) => {
     const [barLegendItems, setBarLegendItems] = useState(() => createInitialStackedLegendItems(categories));
     const [areaLegendItems, setAreaLegendItems] = useState(() => createInitialStackedLegendItems(categories));

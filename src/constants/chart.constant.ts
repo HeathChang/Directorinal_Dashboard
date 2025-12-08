@@ -1,11 +1,13 @@
-export enum ChartTab {
-    TOP_COFFEE_BRANDS,
-    POPULAR_SNACK_BRANDS,
-    WEEKLY_MOOD_TREND,
-    WEEKLY_WORKOUT_TREND,
-    COFFEE_CONSUMPTION,
-    SNACK_IMPACT
-}
+export const ChartTab = {
+    TOP_COFFEE_BRANDS: 0,
+    POPULAR_SNACK_BRANDS: 1,
+    WEEKLY_MOOD_TREND: 2,
+    WEEKLY_WORKOUT_TREND: 3,
+    COFFEE_CONSUMPTION: 4,
+    SNACK_IMPACT: 5
+} as const;
+
+export type ChartTab = typeof ChartTab[keyof typeof ChartTab];
 
 
 

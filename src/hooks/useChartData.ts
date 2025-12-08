@@ -92,7 +92,7 @@ export const useChartData = () => {
         };
 
         fetchData();
-    }, [selectedTab, data]);
+    }, [selectedTab, data, enqueueSnackbar]);
 
     const getBarChartData = useCallback((tab: ChartTab): iBarChartData[] => {
         const rawData = data[tab];

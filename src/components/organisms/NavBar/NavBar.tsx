@@ -16,7 +16,6 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import { LoginModal } from '../../molecules/LoginModal/LoginModal';
 
 interface NavItem {
     path: string;
@@ -33,20 +32,11 @@ const DRAWER_WIDTH = 280;
 export const NavBar = ({ navItems, onDrawerStateChange }: NavBarProps) => {
     const location = useLocation();
     const [drawerOpen, setDrawerOpen] = useState(true);
-    const [loginModalOpen, setLoginModalOpen] = useState(false);
 
     const handleDrawerToggle = () => {
         const newState = !drawerOpen;
         setDrawerOpen(newState);
         onDrawerStateChange?.(newState);
-    };
-
-    const handleOpenLoginModal = () => {
-        setLoginModalOpen(true);
-    };
-
-    const handleCloseLoginModal = () => {
-        setLoginModalOpen(false);
     };
 
     const drawer = (
@@ -123,7 +113,6 @@ export const NavBar = ({ navItems, onDrawerStateChange }: NavBarProps) => {
                     variant="contained"
                     color="primary"
                     fullWidth
-                    onClick={handleOpenLoginModal}
                     sx={{
                         py: 1.5,
                         borderRadius: 2,
@@ -191,10 +180,6 @@ export const NavBar = ({ navItems, onDrawerStateChange }: NavBarProps) => {
             >
                 {drawer}
             </Drawer>
-            <LoginModal open={loginModalOpen} onClose={handleCloseLoginModal}>
-                <Box sx={{ minHeight: 200 }}>
-                </Box>
-            </LoginModal>
         </>
     );
 };

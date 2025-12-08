@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPostApi, updatePostApi, deletePostApi } from '../apis/post.api';
-import type { iPostData, iPostRequest } from '../types/general.type';
+import type { iPostRequest } from '../types/general.type';
 
 export const usePostMutations = () => {
     const queryClient = useQueryClient();

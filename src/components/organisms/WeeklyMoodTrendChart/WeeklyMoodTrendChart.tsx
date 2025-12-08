@@ -10,10 +10,10 @@ interface WeeklyMoodTrendChartProps {
     loading?: boolean;
 }
 
-export const WeeklyMoodTrendChart: React.FC<WeeklyMoodTrendChartProps> = ({ 
-    data, 
-    categories, 
-    loading = false 
+export const WeeklyMoodTrendChart: React.FC<WeeklyMoodTrendChartProps> = ({
+    data,
+    categories,
+    loading = false
 }) => {
     const [barLegendItems, setBarLegendItems] = useState(() => createInitialStackedLegendItems(categories));
     const [areaLegendItems, setAreaLegendItems] = useState(() => createInitialStackedLegendItems(categories));
