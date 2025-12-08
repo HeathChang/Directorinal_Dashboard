@@ -13,7 +13,7 @@ interface CreateMultiLineChartOptionParams {
     data: iMultiLineChartData[];
     legendItems: iLegendItem[];
     xAxisName: string;
-    leftYAxisFields: ('bugs' | 'meetingMissed')[];
+    leftYAxisFields: ('bugs' | 'meetingsMissed')[];
     rightYAxisFields: ('productivity' | 'morale')[];
     leftYAxisName: string;
     rightYAxisName: string;
@@ -32,27 +32,29 @@ export const createMultiLineChartOption = ({
         return {};
     }
 
-    // 팀 목록 추출
-    const teamSet = new Set(data.map(item => item.team));
-    const teams = Array.from(teamSet);
+    // 팀/이름 목록 추출 (team 또는 name 필드 사용)
+    const nameSet = new Set(
+        data.map(item => item.team || item.name).filter((name): name is string => !!name)
+    );
+    const names = Array.from(nameSet);
 
-    if (teams.length === 0) {
+    if (names.length === 0) {
         return {};
     }
 
-    // 데이터를 팀별로 그룹화
-    const teamData: { [team: string]: iMultiLineChartData[] } = {};
-    teams.forEach(team => {
-        teamData[team] = data.filter(item => item.team === team).sort((a, b) => a.x - b.x);
+    // 데이터를 이름별로 그룹화
+    const nameData: { [name: string]: iMultiLineChartData[] } = {};
+    names.forEach(name => {
+        nameData[name] = data.filter(item => (item.team || item.name) === name).sort((a, b) => a.x - b.x);
     });
 
-    // 보이는 팀 필터링
-    const visibleTeams = teams.filter(team => {
-        const legendItem = legendItems.find(li => li.name === team);
+    // 보이는 이름 필터링
+    const visibleNames = names.filter(name => {
+        const legendItem = legendItems.find(li => li.name === name);
         return legendItem?.visible !== false;
     });
 
-    if (visibleTeams.length === 0) {
+    if (visibleNames.length === 0) {
         return {};
     }
 
@@ -67,25 +69,25 @@ export const createMultiLineChartOption = ({
         itemStyle: { color: string };
     }> = [];
 
-    visibleTeams.forEach(team => {
-        const legendItem = legendItems.find(li => li.name === team);
-        const color = legendItem?.color || getTeamColor(teams.indexOf(team));
-        const teamDataPoints = teamData[team];
+    visibleNames.forEach(name => {
+        const legendItem = legendItems.find(li => li.name === name);
+        const color = legendItem?.color || getTeamColor(names.indexOf(name));
+        const nameDataPoints = nameData[name];
 
         // 왼쪽 Y축 필드들 (실선, 원형 마커)
         leftYAxisFields.forEach(field => {
-            if (teamDataPoints.some(item => item[field] !== undefined)) {
+            if (nameDataPoints.some(item => item[field] !== undefined)) {
                 const fieldLabels: Record<string, string> = {
                     bugs: 'Bugs',
-                    meetingMissed: 'Meeting Missed'
+                    meetingsMissed: 'Meeting Missed'
                 };
                 series.push({
-                    name: `${team} - ${fieldLabels[field]}`,
+                    name: `${name} - ${fieldLabels[field]}`,
                     type: 'line',
                     yAxisIndex: 0,
-                    data: teamDataPoints.map(item => ({
+                    data: nameDataPoints.map(item => ({
                         value: [item.x, item[field]],
-                        name: team
+                        name: name
                     })),
                     lineStyle: {
                         type: 'solid',
@@ -102,18 +104,18 @@ export const createMultiLineChartOption = ({
 
         // 오른쪽 Y축 필드들 (점선, 사각형 마커)
         rightYAxisFields.forEach(field => {
-            if (teamDataPoints.some(item => item[field] !== undefined)) {
+            if (nameDataPoints.some(item => item[field] !== undefined)) {
                 const fieldLabels: Record<string, string> = {
                     productivity: 'Productivity',
                     morale: 'Morale'
                 };
                 series.push({
-                    name: `${team} - ${fieldLabels[field]}`,
+                    name: `${name} - ${fieldLabels[field]}`,
                     type: 'line',
                     yAxisIndex: 1,
-                    data: teamDataPoints.map(item => ({
+                    data: nameDataPoints.map(item => ({
                         value: [item.x, item[field]],
-                        name: team
+                        name: name
                     })),
                     lineStyle: {
                         type: 'dashed',
@@ -140,22 +142,22 @@ export const createMultiLineChartOption = ({
                 // 호버된 포인트의 X값
                 const xValue = p.value[0];
 
-                // 호버된 시리즈의 팀 이름 추출
-                const teamName = p.seriesName.split(' - ')[0];
+                // 호버된 시리즈의 이름 추출
+                const itemName = p.seriesName.split(' - ')[0];
 
-                // 해당 팀의 모든 데이터 포인트 찾기
-                const teamDataPoints = teamData[teamName] || [];
-                const pointData = teamDataPoints.find(item => item.x === xValue);
+                // 해당 이름의 모든 데이터 포인트 찾기
+                const itemDataPoints = nameData[itemName] || [];
+                const pointData = itemDataPoints.find(item => item.x === xValue);
 
                 if (!pointData) return '';
 
                 let result = `${xAxisName}: ${xValue}<br/>`;
-                result += `Team: ${teamName}<br/>`;
+                result += `${itemName}<br/>`;
 
                 // 요구사항: 해당하는 팀의 데이터만 표시 (설정된 필드만)
                 const fieldLabels: Record<string, string> = {
                     bugs: 'Bugs',
-                    meetingMissed: 'Meeting Missed',
+                    meetingsMissed: 'Meeting Missed',
                     productivity: 'Productivity',
                     morale: 'Morale'
                 };
@@ -188,39 +190,47 @@ export const createMultiLineChartOption = ({
         yAxis: [
             {
                 type: 'value' as const,
-                name: leftYAxisName,
+                name: `${leftYAxisName}\t(실선)`,
                 position: 'left' as const,
                 axisLine: {
                     show: true
                 },
                 axisLabel: {
                     formatter: '{value}'
+                },
+                nameTextStyle: {
+                    lineHeight: 16
                 }
             },
             {
                 type: 'value' as const,
-                name: rightYAxisName,
+                name: `${rightYAxisName}\t(점선)`,
                 position: 'right' as const,
                 axisLine: {
                     show: true
                 },
                 axisLabel: {
                     formatter: '{value}'
+                },
+                nameTextStyle: {
+                    lineHeight: 16
                 }
             }
         ],
-        series: series
+        series: series as EChartsOption['series']
     };
 };
 
 /**
- * 팀 목록에서 초기 범례 아이템 생성
+ * 이름 목록에서 초기 범례 아이템 생성 (team 또는 name 필드 사용)
  */
 export const createInitialLegendItems = (data: iMultiLineChartData[]): iLegendItem[] => {
-    const teamSet = new Set(data.map(item => item.team));
-    const teamArray = Array.from(teamSet);
-    return teamArray.map((team, index) => ({
-        name: team,
+    const nameSet = new Set(
+        data.map(item => item.team || item.name).filter((name): name is string => !!name)
+    );
+    const nameArray = Array.from(nameSet);
+    return nameArray.map((name, index) => ({
+        name: name,
         color: getTeamColor(index),
         visible: true
     }));

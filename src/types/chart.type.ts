@@ -13,9 +13,10 @@ export interface iStackedChartData {
 // 멀티라인 차트 데이터 타입
 export interface iMultiLineChartData {
     x: number; // 커피 잔수 또는 스낵 수
-    team: string;
+    team?: string;
+    name?: string;
     bugs?: number;
-    meetingMissed?: number;
+    meetingsMissed?: number;
     productivity?: number;
     morale?: number;
 }
@@ -51,21 +52,21 @@ export interface iWeeklyWorkoutData {
     stretching: number;
 }
 
-// 멀티라인 차트용 팀별 커피 소비/버그/색상성
+// 멀티라인 차트용 팀별 커피 소비/버그/생산성
 export interface iTechTeamCoffeeImpactData {
     team: string;
     series: {
         cups: number;
         bugs: number;
-        morale: number;
+        productivity: number;
     }[]
 }
 
 export interface iDepartmentSnackImpactData {
-    department: string;
+    name: string;
     metrics: {
         snacks: number;
-        meetingMissed: number;
+        meetingsMissed: number;
         morale: number;
     }[]
 }

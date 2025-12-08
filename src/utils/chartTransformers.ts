@@ -100,11 +100,10 @@ export const transformTechTeamCoffeeToMultiLineChart = (
                 x: seriesItem.cups,
                 team: teamData.team,
                 bugs: seriesItem.bugs,
-                morale: seriesItem.morale
+                productivity: seriesItem.productivity
             });
         });
     });
-
     return result;
 };
 
@@ -114,54 +113,19 @@ export const transformTechTeamCoffeeToMultiLineChart = (
 export const transformDepartmentSnackToMultiLineChart = (
     response: DepartmentSnackImpactDataResponse
 ): iMultiLineChartData[] => {
-    // response가 null이거나 undefined인 경우
-    if (!response) {
-        console.warn('transformDepartmentSnackToMultiLineChart: response is null or undefined');
-        return [];
-    }
-
-    // departments 속성이 없는 경우
-    if (!response.departments) {
-        console.warn('transformDepartmentSnackToMultiLineChart: response.departments is missing', response);
-        return [];
-    }
-
-    // departments가 배열이 아닌 경우
-    if (!Array.isArray(response.departments)) {
-        console.warn('transformDepartmentSnackToMultiLineChart: response.departments is not an array', response.departments);
-        return [];
-    }
-
-    // departments 배열이 비어있는 경우
-    if (response.departments.length === 0) {
-        console.warn('transformDepartmentSnackToMultiLineChart: response.departments is empty');
-        return [];
-    }
-
     const result: iMultiLineChartData[] = [];
 
-    response.departments.forEach((deptData) => {
-        if (!deptData) {
-            console.warn('transformDepartmentSnackToMultiLineChart: deptData is null or undefined');
+    response.departments.forEach((departmentData) => {
+        if (!departmentData.metrics || !Array.isArray(departmentData.metrics)) {
             return;
         }
 
-        if (!deptData.metrics || !Array.isArray(deptData.metrics)) {
-            console.warn('transformDepartmentSnackToMultiLineChart: deptData.metrics is missing or not an array', deptData);
-            return;
-        }
-
-        deptData.metrics.forEach((metricItem) => {
-            if (!metricItem) {
-                console.warn('transformDepartmentSnackToMultiLineChart: metricItem is null or undefined');
-                return;
-            }
-
+        departmentData.metrics.forEach((metric) => {
             result.push({
-                x: metricItem.snacks,
-                team: deptData.department,
-                meetingMissed: metricItem.meetingMissed,
-                morale: metricItem.morale
+                x: metric.snacks,
+                name: departmentData.name,
+                meetingsMissed: metric.meetingsMissed,
+                morale: metric.morale
             });
         });
     });

@@ -40,7 +40,7 @@ export const SnackImpactChart: React.FC<SnackImpactChartProps> = ({ data, loadin
             data,
             legendItems,
             xAxisName: '스낵 수',
-            leftYAxisFields: ['meetingMissed'],
+            leftYAxisFields: ['meetingsMissed'],
             rightYAxisFields: ['morale'],
             leftYAxisName: '회의 불참횟수',
             rightYAxisName: '사기'
