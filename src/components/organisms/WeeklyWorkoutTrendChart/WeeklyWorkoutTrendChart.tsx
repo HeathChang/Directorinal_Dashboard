@@ -15,11 +15,9 @@ export const WeeklyWorkoutTrendChart: React.FC<WeeklyWorkoutTrendChartProps> = (
     categories, 
     loading = false 
 }) => {
-    // 범례 상태 관리
     const [barLegendItems, setBarLegendItems] = useState(() => createInitialStackedLegendItems(categories));
     const [areaLegendItems, setAreaLegendItems] = useState(() => createInitialStackedLegendItems(categories));
 
-    // 데이터 변경 시 범례 아이템 업데이트
     React.useEffect(() => {
         setBarLegendItems(createInitialStackedLegendItems(categories));
         setAreaLegendItems(createInitialStackedLegendItems(categories));
@@ -57,7 +55,6 @@ export const WeeklyWorkoutTrendChart: React.FC<WeeklyWorkoutTrendChartProps> = (
         );
     }, []);
 
-    // 옵션 생성
     const barOption = useMemo(() => {
         return createStackedBarChartOption({
             data,

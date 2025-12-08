@@ -36,11 +36,9 @@ export const PostTable: React.FC<PostTableProps> = ({
 }) => {
     const observerTarget = useRef<HTMLDivElement>(null);
 
-    // 무한 스크롤 구현
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
-                // 초기 로딩 중이 아니고, 다음 페이지를 가져오는 중이 아니고, 더 가져올 페이지가 있을 때만 요청
                 if (entries[0].isIntersecting && hasMore && !isLoading && !isFetchingNextPage && onLoadMore) {
                     onLoadMore();
                 }
@@ -116,7 +114,6 @@ export const PostTable: React.FC<PostTableProps> = ({
                 </Table>
             </div>
 
-            {/* 무한 스크롤 트리거 */}
             {hasMore && (
                 <div ref={observerTarget} className="h-12 flex items-center justify-center bg-gray-50 border-t border-gray-200">
                     {isFetchingNextPage && (

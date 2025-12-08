@@ -11,11 +11,9 @@ interface PopularSnackBrandsChartProps {
 }
 
 export const PopularSnackBrandsChart: React.FC<PopularSnackBrandsChartProps> = ({ data, loading = false }) => {
-    // 범례 상태 관리
     const [barLegendItems, setBarLegendItems] = useState(() => createInitialBarLegendItems(data));
     const [donutLegendItems, setDonutLegendItems] = useState(() => createInitialDonutLegendItems(data));
 
-    // 데이터 변경 시 범례 아이템 업데이트
     React.useEffect(() => {
         setBarLegendItems(createInitialBarLegendItems(data));
         setDonutLegendItems(createInitialDonutLegendItems(data));
@@ -61,7 +59,6 @@ export const PopularSnackBrandsChart: React.FC<PopularSnackBrandsChartProps> = (
         return `${brandName}<br/>점유율: ${value}`;
     }, []);
 
-    // 옵션 생성
     const barOption = useMemo(() => {
         return createBarChartOption({
             data,

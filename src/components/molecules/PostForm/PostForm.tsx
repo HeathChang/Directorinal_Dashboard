@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { IconX } from '@tabler/icons-react';
 import { Input } from '../../atoms/Input';
 import { Textarea } from '../../atoms/Textarea';
@@ -6,7 +6,7 @@ import { Select } from '../../atoms/Select';
 import type { SelectOption } from '../../atoms/Select';
 
 import { Button } from '@mui/material';
-import type { iPostRequest, PostCategory } from '../../../types/general.type';
+import type { iPostRequest } from '../../../types/general.type';
 import { POST_CATEGORY_OPTIONS, POST_LIMITS } from '../../../constants/post.constant';
 import { FORBIDDEN_WORD_FILTER } from '../../../constants/general.constant';
 
@@ -33,18 +33,6 @@ export const PostForm: React.FC<PostFormProps> = ({
     const [tagInput, setTagInput] = useState('');
     const [errors, setErrors] = useState<Record<string, string>>({});
 
-    useEffect(() => {
-        if (initialData) {
-            setFormData({
-                title: initialData.title || '',
-                body: initialData.body || '',
-                category: initialData.category || 'FREE',
-                tags: initialData.tags || []
-            });
-        }
-    }, [initialData]);
-
-    // 금칙어 검증
     const checkForbiddenWords = (text: string): string | null => {
         for (const word of FORBIDDEN_WORD_FILTER) {
             if (text.includes(word)) {
@@ -58,14 +46,17 @@ export const PostForm: React.FC<PostFormProps> = ({
         e.preventDefault();
         const newErrors: Record<string, string> = {};
 
-        // 제목 검증
         if (!formData.title.trim()) {
             newErrors.title = '제목을 입력해주세요.';
         } else if (formData.title.length > POST_LIMITS.TITLE_MAX_LENGTH) {
             newErrors.title = `제목은 ${POST_LIMITS.TITLE_MAX_LENGTH}자 이하여야 합니다.`;
+        } else {
+            const forbiddenError = checkForbiddenWords(formData.title);
+            if (forbiddenError) {
+                newErrors.title = forbiddenError;
+            }
         }
 
-        // 본문 검증
         if (!formData.body.trim()) {
             newErrors.body = '본문을 입력해주세요.';
         } else if (formData.body.length > POST_LIMITS.BODY_MAX_LENGTH) {
@@ -77,7 +68,6 @@ export const PostForm: React.FC<PostFormProps> = ({
             }
         }
 
-        // 태그 검증
         if (formData.tags.length > POST_LIMITS.TAGS_MAX_COUNT) {
             newErrors.tags = `태그는 최대 ${POST_LIMITS.TAGS_MAX_COUNT}개까지 가능합니다.`;
         }
@@ -105,7 +95,6 @@ export const PostForm: React.FC<PostFormProps> = ({
             return;
         }
 
-        // 중복 제거
         if (formData.tags.includes(trimmedTag)) {
             setErrors({ ...errors, tags: '이미 추가된 태그입니다.' });
             return;
@@ -149,7 +138,6 @@ export const PostForm: React.FC<PostFormProps> = ({
                     const value = e.target.value;
                     setFormData({ ...formData, body: value });
                     setErrors({ ...errors, body: '' });
-                    // 실시간 금칙어 검증
                     if (value) {
                         const forbiddenError = checkForbiddenWords(value);
                         if (forbiddenError) {
@@ -164,12 +152,16 @@ export const PostForm: React.FC<PostFormProps> = ({
                 required
             />
 
-            <Select
-                label="카테고리"
-                value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value as string })}
-                options={categoryOptions}
-            />
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                    카테고리
+                </label>
+                <Select
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value as string })}
+                    options={categoryOptions}
+                />
+            </div>
 
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">

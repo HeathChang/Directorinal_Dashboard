@@ -1,18 +1,15 @@
-// 바 차트, 도넛 차트 데이터 타입
 export interface iBarChartData {
     name: string;
     value: number;
 }
 
-// 스택형 차트 데이터 타입
 export interface iStackedChartData {
     week: string;
-    [key: string]: string | number; // happy, tired, stressed 또는 running, cycling, stretching
+    [key: string]: string | number;
 }
 
-// 멀티라인 차트 데이터 타입
 export interface iMultiLineChartData {
-    x: number; // 커피 잔수 또는 스낵 수
+    x: number;
     team?: string;
     name?: string;
     bugs?: number;
@@ -52,7 +49,6 @@ export interface iWeeklyWorkoutData {
     stretching: number;
 }
 
-// 멀티라인 차트용 팀별 커피 소비/버그/생산성
 export interface iTechTeamCoffeeImpactData {
     team: string;
     series: {
@@ -71,7 +67,6 @@ export interface iDepartmentSnackImpactData {
     }[]
 }
 
-// API Response 타입 정의 (배열 형태로 직접 반환)
 export type CoffeeBrandDataResponse = iCoffeeBrandData[];
 export type SnackBrandShareDataResponse = iSnackBrandShareData[];
 export type MoodTrendDataResponse = iMoodTrendData[];

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useSnackbar } from 'notistack';
 import {
     getTopCoffeeBrandsApi,
     getPopularSnackBrandsApi,
@@ -38,6 +39,7 @@ type ChartApiResponse =
     | DepartmentSnackImpactDataResponse;
 
 export const useChartData = () => {
+    const { enqueueSnackbar } = useSnackbar();
     const [selectedTab, setSelectedTab] = useState(0);
     const [loading, setLoading] = useState<{ [key: number]: boolean }>({});
     const [data, setData] = useState<{ [key: number]: ChartApiResponse }>({});
@@ -79,8 +81,11 @@ export const useChartData = () => {
                 if (result) {
                     setData(prev => ({ ...prev, [selectedTab]: result }));
                 }
-            } catch (e) {
-                console.error(e);
+            } catch (error) {
+                enqueueSnackbar(
+                    error instanceof Error ? error.message : '차트 데이터를 불러오는데 실패했습니다.',
+                    { variant: 'error' }
+                );
             } finally {
                 setLoading(prev => ({ ...prev, [selectedTab]: false }));
             }

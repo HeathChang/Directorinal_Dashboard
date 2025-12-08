@@ -65,10 +65,9 @@ export const PostHeader: React.FC<PostHeaderProps> = ({
                         </Button>
 
                     </div>
-                </div>
+                    </div>
 
-                {/* 필터 섹션 */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                     <div className="md:col-span-2">
                         <SearchBar
                             value={searchValue}

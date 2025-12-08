@@ -42,31 +42,23 @@ export const PostTemplate: React.FC<PostTemplateProps> = ({
 }) => {
     const { enqueueSnackbar } = useSnackbar();
 
-    // 컬럼 설정 상태 관리
     const [columns, setColumns] = useState<iColumnConfig[]>(() => {
         const saved = localStorage.getItem('postColumns');
         if (saved) {
             const savedColumns: iColumnConfig[] = JSON.parse(saved);
-            // 순번 컬럼이 없으면 추가하고, 제목 앞에 오도록 순서 보장
             const hasIndexColumn = savedColumns.some(col => col.id === 'index');
             if (!hasIndexColumn) {
-                // 순번 컬럼 추가
                 const indexColumn: iColumnConfig = { id: 'index', label: '순번', width: 80, visible: true, resizable: true };
-                // 제목 컬럼의 인덱스 찾기
                 const titleIndex = savedColumns.findIndex(col => col.id === 'title');
                 if (titleIndex >= 0) {
-                    // 제목 앞에 순번 삽입
                     savedColumns.splice(titleIndex, 0, indexColumn);
                 } else {
-                    // 제목이 없으면 맨 앞에 추가
                     savedColumns.unshift(indexColumn);
                 }
             } else {
-                // 순번 컬럼이 있으면 제목 앞에 오도록 순서 조정
                 const indexColumn = savedColumns.find(col => col.id === 'index');
                 const titleIndex = savedColumns.findIndex(col => col.id === 'title');
                 if (indexColumn && titleIndex >= 0) {
-                    // 순번 컬럼 제거 후 제목 앞에 삽입
                     const filteredColumns = savedColumns.filter(col => col.id !== 'index');
                     filteredColumns.splice(titleIndex, 0, indexColumn);
                     return filteredColumns;
@@ -77,20 +69,16 @@ export const PostTemplate: React.FC<PostTemplateProps> = ({
         return DEFAULT_POST_COLUMNS;
     });
 
-    // 검색 상태 관리 (클라이언트 사이드 필터링)
     const [searchValue, setSearchValue] = useState('');
 
-    // 모달 상태 관리
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
     const [isColumnSettingsModalOpen, setIsColumnSettingsModalOpen] = useState(false);
     const [editingPost, setEditingPost] = useState<iPostData | undefined>();
 
-    // 컬럼 설정 localStorage 저장
     useEffect(() => {
         localStorage.setItem('postColumns', JSON.stringify(columns));
     }, [columns]);
 
-    // 검색 필터만 클라이언트 사이드에서 처리 (카테고리와 정렬은 서버에서 처리)
     const filteredPosts = useMemo(() => {
         if (!searchValue) {
             return posts;
@@ -103,13 +91,11 @@ export const PostTemplate: React.FC<PostTemplateProps> = ({
         );
     }, [posts, searchValue]);
 
-    // 테이블 정렬 핸들러
     const handleTableSort = useCallback((field: PostSortField) => {
         const newOrder = sortField === field && sortOrder === 'asc' ? 'desc' : 'asc';
         onSortChange(field, newOrder);
     }, [sortField, sortOrder, onSortChange]);
 
-    // 컬럼 리사이즈 핸들러
     const handleColumnResize = useCallback((columnId: string, newWidth: number) => {
         setColumns(prev =>
             prev.map(col =>
@@ -118,18 +104,15 @@ export const PostTemplate: React.FC<PostTemplateProps> = ({
         );
     }, []);
 
-    // 컬럼 설정 업데이트 핸들러
     const handleColumnSettingsUpdate = useCallback((newColumns: iColumnConfig[]) => {
         setColumns(newColumns);
     }, []);
 
-    // 게시글 편집 핸들러
     const handleEditPost = useCallback((post: iPostData) => {
         setEditingPost(post);
         setIsPostModalOpen(true);
     }, []);
 
-    // 게시글 삭제 핸들러
     const handleDeletePost = useCallback(async (postId: string) => {
         if (window.confirm('정말 삭제하시겠습니까?')) {
             try {
@@ -141,7 +124,6 @@ export const PostTemplate: React.FC<PostTemplateProps> = ({
         }
     }, [onDeletePost, enqueueSnackbar]);
 
-    // 게시글 제출 핸들러
     const handlePostSubmit = useCallback(async (data: iPostRequest) => {
         try {
             if (editingPost) {
@@ -153,19 +135,16 @@ export const PostTemplate: React.FC<PostTemplateProps> = ({
             }
             setIsPostModalOpen(false);
             setEditingPost(undefined);
-        } catch (error) {
-            console.error('게시글 저장 실패:', error);
+        } catch {
             enqueueSnackbar('게시글 저장에 실패했습니다.', { variant: 'error' });
         }
     }, [editingPost, onCreatePost, onUpdatePost, enqueueSnackbar]);
 
-    // 모달 닫기 핸들러
     const handlePostModalClose = useCallback(() => {
         setIsPostModalOpen(false);
         setEditingPost(undefined);
     }, []);
 
-    // 게시글 작성 클릭 핸들러
     const handleCreatePostClick = useCallback(() => {
         setEditingPost(undefined);
         setIsPostModalOpen(true);

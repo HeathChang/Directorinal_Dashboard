@@ -37,7 +37,6 @@ export const usePosts = (params?: UsePostsParams) => {
         initialPageParam: null as string | null
     });
 
-    // 모든 페이지의 게시글을 하나의 배열로 합치기
     const allPosts: iPostData[] = [];
     if (postsData?.pages) {
         postsData.pages.forEach(page => {

@@ -59,7 +59,6 @@ export const TopCoffeeBrandsChart: React.FC<TopCoffeeBrandsChartProps> = ({ data
         return `${brandName}<br/>인기도: ${value}`;
     }, []);
 
-    // 옵션 생성
     const barOption = useMemo(() => {
         return createBarChartOption({
             data,

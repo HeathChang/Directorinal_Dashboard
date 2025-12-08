@@ -15,7 +15,6 @@ apiClient.interceptors.request.use((config) => {
     return config;
 });
 
-// 게시글 목록 조회 (Cursor 기반 페이지네이션)
 export interface GetPostsParams {
     nextCursor?: string | null;
     prevCursor?: string | null;
@@ -40,7 +39,6 @@ export const getPostsApi = async (params: GetPostsParams): Promise<{
         queryParams.prevCursor = params.prevCursor;
     }
 
-    // sort, order, category 파라미터 추가
     if (params.sort) {
         queryParams.sort = params.sort;
     }
@@ -57,25 +55,21 @@ export const getPostsApi = async (params: GetPostsParams): Promise<{
     return response.data;
 };
 
-// 게시글 상세 조회
 export const getPostApi = async (id: string): Promise<iPostData> => {
     const response = await apiClient.get(`/posts/${id}`);
     return response.data;
 };
 
-// 게시글 작성
 export const createPostApi = async (postData: iPostRequest): Promise<iPostData> => {
     const response = await apiClient.post('/posts', postData);
     return response.data;
 };
 
-// 게시글 수정
 export const updatePostApi = async (id: string, postData: iPostRequest): Promise<iPostData> => {
     const response = await apiClient.patch(`/posts/${id}`, postData);
     return response.data;
 };
 
-// 게시글 삭제
 export const deletePostApi = async (id: string): Promise<void> => {
     await apiClient.delete(`/posts/${id}`);
 };

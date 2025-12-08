@@ -5,7 +5,6 @@ import type { iPostData, iPostRequest } from '../types/general.type';
 export const usePostMutations = () => {
     const queryClient = useQueryClient();
 
-    // 게시글 작성
     const createMutation = useMutation({
         mutationFn: createPostApi,
         onSuccess: () => {
@@ -13,7 +12,6 @@ export const usePostMutations = () => {
         }
     });
 
-    // 게시글 수정
     const updateMutation = useMutation({
         mutationFn: ({ id, data }: { id: string; data: iPostRequest }) => 
             updatePostApi(id, data),
@@ -22,7 +20,6 @@ export const usePostMutations = () => {
         }
     });
 
-    // 게시글 삭제
     const deleteMutation = useMutation({
         mutationFn: deletePostApi,
         onSuccess: () => {

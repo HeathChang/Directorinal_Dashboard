@@ -6,13 +6,13 @@ import { ChartLegend } from './ChartLegend';
 import type { EChartsOption } from 'echarts';
 
 interface MultiLineChartProps {
-    option: EChartsOption; // ECharts 옵션을 props로 받음
+    option: EChartsOption;
     title?: string;
     height?: number;
-    legendItems: iLegendItem[]; // 범례 아이템을 props로 받음
-    onLegendToggle: (name: string) => void; // 범례 토글 핸들러
-    onColorChange: (name: string, color: string) => void; // 색상 변경 핸들러
-    hasData?: boolean; // 데이터 존재 여부
+    legendItems: iLegendItem[];
+    onLegendToggle: (name: string) => void;
+    onColorChange: (name: string, color: string) => void;
+    hasData?: boolean;
 }
 
 

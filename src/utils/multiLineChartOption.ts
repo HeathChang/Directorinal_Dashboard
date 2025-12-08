@@ -32,7 +32,6 @@ export const createMultiLineChartOption = ({
         return {};
     }
 
-    // 팀/이름 목록 추출 (team 또는 name 필드 사용)
     const nameSet = new Set(
         data.map(item => item.team || item.name).filter((name): name is string => !!name)
     );
@@ -42,13 +41,11 @@ export const createMultiLineChartOption = ({
         return {};
     }
 
-    // 데이터를 이름별로 그룹화
     const nameData: { [name: string]: iMultiLineChartData[] } = {};
     names.forEach(name => {
         nameData[name] = data.filter(item => (item.team || item.name) === name).sort((a, b) => a.x - b.x);
     });
 
-    // 보이는 이름 필터링
     const visibleNames = names.filter(name => {
         const legendItem = legendItems.find(li => li.name === name);
         return legendItem?.visible !== false;
@@ -74,7 +71,6 @@ export const createMultiLineChartOption = ({
         const color = legendItem?.color || getTeamColor(names.indexOf(name));
         const nameDataPoints = nameData[name];
 
-        // 왼쪽 Y축 필드들 (실선, 원형 마커)
         leftYAxisFields.forEach(field => {
             if (nameDataPoints.some(item => item[field] !== undefined)) {
                 const fieldLabels: Record<string, string> = {
@@ -102,7 +98,6 @@ export const createMultiLineChartOption = ({
             }
         });
 
-        // 오른쪽 Y축 필드들 (점선, 사각형 마커)
         rightYAxisFields.forEach(field => {
             if (nameDataPoints.some(item => item[field] !== undefined)) {
                 const fieldLabels: Record<string, string> = {
@@ -139,13 +134,10 @@ export const createMultiLineChartOption = ({
                 const p = params as { value?: [number, number | undefined]; seriesName?: string };
                 if (!p.value || !p.seriesName) return '';
 
-                // 호버된 포인트의 X값
                 const xValue = p.value[0];
 
-                // 호버된 시리즈의 이름 추출
                 const itemName = p.seriesName.split(' - ')[0];
 
-                // 해당 이름의 모든 데이터 포인트 찾기
                 const itemDataPoints = nameData[itemName] || [];
                 const pointData = itemDataPoints.find(item => item.x === xValue);
 
@@ -154,7 +146,6 @@ export const createMultiLineChartOption = ({
                 let result = `${xAxisName}: ${xValue}<br/>`;
                 result += `${itemName}<br/>`;
 
-                // 요구사항: 해당하는 팀의 데이터만 표시 (설정된 필드만)
                 const fieldLabels: Record<string, string> = {
                     bugs: 'Bugs',
                     meetingsMissed: 'Meeting Missed',
@@ -173,7 +164,7 @@ export const createMultiLineChartOption = ({
             }
         },
         legend: {
-            show: false, // 커스텀 범례 사용
+            show: false,
         },
         grid: {
             left: '3%',
@@ -221,9 +212,6 @@ export const createMultiLineChartOption = ({
     };
 };
 
-/**
- * 이름 목록에서 초기 범례 아이템 생성 (team 또는 name 필드 사용)
- */
 export const createInitialLegendItems = (data: iMultiLineChartData[]): iLegendItem[] => {
     const nameSet = new Set(
         data.map(item => item.team || item.name).filter((name): name is string => !!name)

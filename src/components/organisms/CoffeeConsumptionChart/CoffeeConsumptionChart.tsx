@@ -10,10 +10,8 @@ interface CoffeeConsumptionChartProps {
 }
 
 export const CoffeeConsumptionChart: React.FC<CoffeeConsumptionChartProps> = ({ data, loading = false }) => {
-    // 범례 상태 관리
     const [legendItems, setLegendItems] = useState(() => createInitialLegendItems(data));
 
-    // 데이터 변경 시 범례 아이템 업데이트
     React.useEffect(() => {
         setLegendItems(createInitialLegendItems(data));
     }, [data]);
@@ -34,7 +32,6 @@ export const CoffeeConsumptionChart: React.FC<CoffeeConsumptionChartProps> = ({ 
         );
     }, []);
 
-    // 옵션 생성
     const option = useMemo(() => {
         return createMultiLineChartOption({
             data,
