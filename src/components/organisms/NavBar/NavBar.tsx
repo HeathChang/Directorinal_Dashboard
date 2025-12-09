@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
     Drawer,
-    Box,
     List,
     ListItem,
     ListItemButton,
@@ -10,7 +9,6 @@ import {
     IconButton,
     Divider,
     Button,
-    Typography,
     AppBar,
     Toolbar,
 } from '@mui/material';
@@ -40,60 +38,32 @@ export const NavBar = ({ navItems, onDrawerStateChange }: NavBarProps) => {
     };
 
     const drawer = (
-        <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-            <Box
-                sx={{
-                    p: 2.5,
-                    backgroundColor: 'primary.main',
-                    color: 'white',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    minHeight: 64,
-                }}
-            >
-                <Typography variant="h6" component="div" sx={{ fontWeight: 600, fontSize: '1.1rem' }}>
-                    Navigation
-                </Typography>
+        <div className="h-full flex flex-col">
+            <div className="p-5 bg-primary-600 text-white flex items-center justify-between min-h-[64px]">
+                <h6 className="font-semibold text-lg">Navigation</h6>
                 <IconButton
                     onClick={handleDrawerToggle}
-                    sx={{
-                        color: 'white',
-                        '&:hover': {
-                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                        },
-                    }}
+                    className="text-white hover:bg-white/10"
                     aria-label="close drawer"
                 >
                     <CloseIcon />
                 </IconButton>
-            </Box>
+            </div>
             <Divider />
-            <List sx={{ flex: 1, pt: 1.5, pb: 1 }}>
+            <List className="flex-1 pt-3 pb-2">
                 {navItems.map((item) => {
                     const isActive = location.pathname === item.path;
                     return (
-                        <ListItem key={item.path} disablePadding sx={{ mb: 0.5, px: 1.5 }}>
+                        <ListItem key={item.path} disablePadding className="mb-1 px-3">
                             <ListItemButton
                                 component={Link}
                                 to={item.path}
                                 selected={isActive}
-                                sx={{
-                                    borderRadius: 2,
-                                    backgroundColor: isActive ? 'primary.main' : 'transparent',
-                                    color: isActive ? 'white' : 'text.primary',
-                                    py: 1.25,
-                                    '&:hover': {
-                                        backgroundColor: isActive ? 'primary.dark' : 'action.hover',
-                                    },
-                                    '&.Mui-selected': {
-                                        backgroundColor: 'primary.main',
-                                        color: 'white',
-                                        '&:hover': {
-                                            backgroundColor: 'primary.dark',
-                                        },
-                                    },
-                                }}
+                                className={`rounded-lg py-2.5 ${
+                                    isActive
+                                        ? 'bg-primary-600 text-white hover:bg-primary-700'
+                                        : 'bg-transparent text-gray-900 hover:bg-gray-100'
+                                }`}
                             >
                                 <ListItemText
                                     primary={item.label}
@@ -108,44 +78,28 @@ export const NavBar = ({ navItems, onDrawerStateChange }: NavBarProps) => {
                 })}
             </List>
             <Divider />
-            <Box sx={{ p: 2 }}>
+            <div className="p-4">
                 <Button
                     variant="contained"
                     color="primary"
                     fullWidth
-                    sx={{
-                        py: 1.5,
-                        borderRadius: 2,
-                        textTransform: 'none',
-                        fontWeight: 600,
-                        boxShadow: 2,
-                        '&:hover': {
-                            boxShadow: 4,
-                        },
-                    }}
+                    className="py-3 rounded-lg normal-case font-semibold shadow-md hover:shadow-lg"
                 >
                     로그인
                 </Button>
-            </Box>
-        </Box>
+            </div>
+        </div>
     );
 
     return (
         <>
             <AppBar
                 position="fixed"
-                sx={{
+                className="bg-white text-gray-900 shadow-sm transition-all duration-300"
+                style={{
                     width: drawerOpen ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
-                    ml: drawerOpen ? `${DRAWER_WIDTH}px` : 0,
-                    transition: (theme) =>
-                        theme.transitions.create(['width', 'margin'], {
-                            easing: theme.transitions.easing.sharp,
-                            duration: theme.transitions.duration.enteringScreen,
-                        }),
-                    backgroundColor: 'white',
-                    color: 'text.primary',
-                    boxShadow: 1,
-                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                    marginLeft: drawerOpen ? `${DRAWER_WIDTH}px` : 0,
+                    zIndex: 1201,
                 }}
             >
                 <Toolbar>
@@ -154,27 +108,21 @@ export const NavBar = ({ navItems, onDrawerStateChange }: NavBarProps) => {
                         aria-label="open drawer"
                         edge="start"
                         onClick={handleDrawerToggle}
-                        sx={{ mr: 2 }}
+                        className="mr-4"
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                        Directional 2025
-                    </Typography>
+                    <h6 className="text-lg font-medium flex-grow whitespace-nowrap">Directional 2025</h6>
                 </Toolbar>
             </AppBar>
             <Drawer
                 variant="persistent"
                 open={drawerOpen}
-                sx={{
-                    width: DRAWER_WIDTH,
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
+                PaperProps={{
+                    className: 'w-[280px] shrink-0 box-border border-r border-gray-200 relative',
+                    style: {
                         width: DRAWER_WIDTH,
-                        boxSizing: 'border-box',
-                        borderRight: '1px solid',
-                        borderColor: 'divider',
-                        position: 'relative',
+                        flexShrink: 0,
                     },
                 }}
             >

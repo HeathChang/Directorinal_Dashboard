@@ -1,5 +1,4 @@
 import React, { useMemo, useState, useCallback } from 'react';
-import { Box } from '@mui/material';
 import { StackedBarChart, StackedAreaChart } from '../../molecules/charts';
 import type { iStackedChartData } from '../../../types/chart.type';
 import { createStackedBarChartOption, createStackedAreaChartOption, createInitialStackedLegendItems } from '../../../utils/stackedChartOption';
@@ -80,16 +79,16 @@ export const WeeklyWorkoutTrendChart: React.FC<WeeklyWorkoutTrendChartProps> = (
     }, [data, categories, areaLegendItems]);
 
     if (loading) {
-        return <Box sx={{ p: 3, textAlign: 'center' }}>Loading...</Box>;
+        return <div className="p-6 text-center">Loading...</div>;
     }
 
     if (!data || data.length === 0 || !categories || categories.length === 0) {
-        return <Box sx={{ p: 3, textAlign: 'center' }}>No data available for Weekly Workout Trend</Box>;
+        return <div className="p-6 text-center">No data available for Weekly Workout Trend</div>;
     }
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3 }}>
-            <Box sx={{ flex: 1 }}>
+        <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1">
                 <StackedBarChart
                     option={barOption}
                     title="Weekly Workout Trend - Stacked Bar Chart"
@@ -99,8 +98,8 @@ export const WeeklyWorkoutTrendChart: React.FC<WeeklyWorkoutTrendChartProps> = (
                     onColorChange={handleBarColorChange}
                     hasData={data.length > 0 && categories.length > 0}
                 />
-            </Box>
-            <Box sx={{ flex: 1 }}>
+            </div>
+            <div className="flex-1">
                 <StackedAreaChart
                     option={areaOption}
                     title="Weekly Workout Trend - Stacked Area Chart"
@@ -110,8 +109,8 @@ export const WeeklyWorkoutTrendChart: React.FC<WeeklyWorkoutTrendChartProps> = (
                     onColorChange={handleAreaColorChange}
                     hasData={data.length > 0 && categories.length > 0}
                 />
-            </Box>
-        </Box>
+            </div>
+        </div>
     );
 };
 

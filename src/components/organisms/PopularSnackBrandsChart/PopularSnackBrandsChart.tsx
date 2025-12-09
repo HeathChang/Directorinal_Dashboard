@@ -1,5 +1,4 @@
 import React, { useMemo, useState, useCallback } from 'react';
-import { Box } from '@mui/material';
 import { BarChart, DonutChart } from '../../molecules/charts';
 import type { iBarChartData } from '../../../types/chart.type';
 import { createBarChartOption, createInitialBarLegendItems } from '../../../utils/barChartOption';
@@ -78,16 +77,16 @@ export const PopularSnackBrandsChart: React.FC<PopularSnackBrandsChartProps> = (
     }, [data, donutLegendItems]);
 
     if (loading) {
-        return <Box sx={{ p: 3, textAlign: 'center' }}>Loading...</Box>;
+        return <div className="p-6 text-center">Loading...</div>;
     }
 
     if (!data || data.length === 0) {
-        return <Box sx={{ p: 3, textAlign: 'center' }}>No data available for Popular Snack Brands</Box>;
+        return <div className="p-6 text-center">No data available for Popular Snack Brands</div>;
     }
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3 }}>
-            <Box sx={{ flex: 1 }}>
+        <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1">
                 <BarChart
                     option={barOption}
                     title="Popular Snack Brands - Bar Chart"
@@ -97,8 +96,8 @@ export const PopularSnackBrandsChart: React.FC<PopularSnackBrandsChartProps> = (
                     onColorChange={handleBarColorChange}
                     hasData={data.length > 0}
                 />
-            </Box>
-            <Box sx={{ flex: 1 }}>
+            </div>
+            <div className="flex-1">
                 <DonutChart
                     option={donutOption}
                     title="Popular Snack Brands - Donut Chart"
@@ -108,8 +107,8 @@ export const PopularSnackBrandsChart: React.FC<PopularSnackBrandsChartProps> = (
                     onColorChange={handleDonutColorChange}
                     hasData={data.length > 0}
                 />
-            </Box>
-        </Box>
+            </div>
+        </div>
     );
 };
 

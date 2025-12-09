@@ -1,5 +1,4 @@
 import React, { useMemo, useState, useCallback } from 'react';
-import { Box } from '@mui/material';
 import { MultiLineChart } from '../../molecules/charts';
 import type { iMultiLineChartData } from '../../../types/chart.type';
 import { createMultiLineChartOption, createInitialLegendItems } from '../../../utils/multiLineChartOption';
@@ -45,15 +44,15 @@ export const CoffeeConsumptionChart: React.FC<CoffeeConsumptionChartProps> = ({ 
     }, [data, legendItems]);
 
     if (loading) {
-        return <Box sx={{ p: 3, textAlign: 'center' }}>Loading...</Box>;
+        return <div className="p-6 text-center">Loading...</div>;
     }
 
     if (!data || data.length === 0) {
-        return <Box sx={{ p: 3, textAlign: 'center' }}>No data available for Coffee Consumption</Box>;
+        return <div className="p-6 text-center">No data available for Coffee Consumption</div>;
     }
 
     return (
-        <Box>
+        <div>
             <MultiLineChart
                 option={option}
                 title="Coffee Consumption - Multi-Line Chart"
@@ -63,7 +62,7 @@ export const CoffeeConsumptionChart: React.FC<CoffeeConsumptionChartProps> = ({ 
                 onColorChange={handleColorChange}
                 hasData={data.length > 0}
             />
-        </Box>
+        </div>
     );
 };
 

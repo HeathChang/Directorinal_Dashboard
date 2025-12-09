@@ -30,9 +30,9 @@ export const MultiLineChart: React.FC<MultiLineChartProps> = ({
     }, [hasData, option]);
 
     return (
-        <Paper sx={{ p: 3, height: '100%' }}>
+        <Paper className="p-6 h-full">
             {title && (
-                <Typography variant="h6" sx={{ mb: 2 }}>
+                <Typography variant="h6" className="mb-4">
                     {title}
                 </Typography>
             )}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Popover } from '@mui/material';
+import { Typography, Popover } from '@mui/material';
 import type { iLegendItem } from '../../../types/chart.type';
 
 interface ChartLegendProps {
@@ -33,43 +33,30 @@ export const ChartLegend: React.FC<ChartLegendProps> = ({ items, onToggle, onCol
     const open = Boolean(anchorEl);
 
     return (
-        <Box sx={{ mt: 1.5, display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+        <div className="mt-3 flex flex-wrap gap-1">
             {items.map((item) => (
-                <Box
+                <div
                     key={item.name}
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 0.5,
-                        p: 0.5
-                    }}
+                    className="flex items-center gap-1 p-0.5"
                 >
-                    <Box
-                        sx={{
-                            width: 14,
-                            height: 14,
+                    <div
+                        className="w-[14px] h-[14px] border border-gray-300 cursor-pointer relative"
+                        style={{
                             backgroundColor: item.color,
-                            border: '1px solid',
-                            borderColor: 'divider',
-                            cursor: 'pointer',
                             opacity: item.visible ? 1 : 0.3,
-                            position: 'relative'
                         }}
                         onClick={(e) => handleColorClick(e, item.name)}
                     />
                     <Typography
                         variant="caption"
-                        sx={{
-                            cursor: 'pointer',
-                            opacity: item.visible ? 1 : 0.3,
-                            textDecoration: item.visible ? 'none' : 'line-through',
-                            fontSize: '0.75rem'
-                        }}
+                        className={`cursor-pointer text-xs ${
+                            item.visible ? 'opacity-100 no-underline' : 'opacity-30 line-through'
+                        }`}
                         onClick={() => onToggle(item.name)}
                     >
                         {item.name}
                     </Typography>
-                </Box>
+                </div>
             ))}
 
             <Popover
@@ -81,36 +68,30 @@ export const ChartLegend: React.FC<ChartLegendProps> = ({ items, onToggle, onCol
                     horizontal: 'left',
                 }}
             >
-                <Box sx={{ p: 1, display: 'flex', gap: 0.5, flexWrap: 'wrap', width: 150 }}>
+                <div className="p-2 flex gap-1 flex-wrap w-[150px]">
                     {/* Predefined colors for quick selection */}
                     {[
                         '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de',
                         '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc',
                         '#000000', '#ffffff', '#ff0000', '#00ff00', '#0000ff'
                     ].map((color) => (
-                        <Box
+                        <div
                             key={color}
-                            sx={{
-                                width: 20,
-                                height: 20,
-                                backgroundColor: color,
-                                border: '1px solid #ccc',
-                                cursor: 'pointer',
-                                '&:hover': { transform: 'scale(1.1)' }
-                            }}
+                            className="w-5 h-5 border border-gray-400 cursor-pointer hover:scale-110 transition-transform"
+                            style={{ backgroundColor: color }}
                             onClick={() => handleColorSelect(color)}
                         />
                     ))}
                     {/* Native Color Input for custom colors */}
-                    <Box sx={{ width: '100%', mt: 0.5 }}>
+                    <div className="w-full mt-1">
                         <input
                             type="color"
-                            style={{ width: '100%', height: '30px', cursor: 'pointer' }}
+                            className="w-full h-[30px] cursor-pointer"
                             onChange={(e) => handleColorSelect(e.target.value)}
                         />
-                    </Box>
-                </Box>
+                    </div>
+                </div>
             </Popover>
-        </Box>
+        </div>
     );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useAuth } from '../../../hooks/useAuth';
 
@@ -47,12 +47,7 @@ export const Header: React.FC = () => {
                             to="/post"
                             variant={isPostActive ? 'contained' : 'outlined'}
                             size="small"
-                            className="cursor-pointer"
-                            sx={{
-                                textTransform: 'none',
-                                fontWeight: isPostActive ? 600 : 500,
-                                minWidth: 80,
-                            }}
+                            className={`cursor-pointer font-regular min-w-[80px] ${isChartActive ? 'bg-primary-600 text-white' : 'bg-white text-gray-900 border border-gray-300'}`}
                         >
                             Post
                         </Button>
@@ -62,30 +57,16 @@ export const Header: React.FC = () => {
                             to="/chart"
                             variant={isChartActive ? 'contained' : 'outlined'}
                             size="small"
-                            className="cursor-pointer"
-                            sx={{
-                                textTransform: 'none',
-                                fontWeight: isChartActive ? 600 : 500,
-                                minWidth: 80,
-                            }}
+                            className={`cursor-pointer font-regular min-w-[80px] ${isChartActive ? 'bg-primary-600 text-white' : 'bg-white text-gray-900 border border-gray-300'}`}
                         >
                             Chart
                         </Button>
 
-                        <Button
-                            variant="contained"
-                            size="small"
-                            onClick={handleLogin}
-                            disabled={isAuthenticated}
-                            className="cursor-pointer"
-                            sx={{
-                                textTransform: 'none',
-                                fontWeight: 600,
-                                minWidth: 80,
-                            }}
-                        >
-                            로그인
-                        </Button>
+                        <Tooltip open={!isAuthenticated} title="로그인을 먼저 진행해주세요." arrow>
+                            <Button variant="contained" size="small" onClick={handleLogin} disabled={isAuthenticated} className="cursor-pointer font-regular min-w-[80px]">
+                                로그인
+                            </Button>
+                        </Tooltip>
                     </div>
                 </div>
             </div>

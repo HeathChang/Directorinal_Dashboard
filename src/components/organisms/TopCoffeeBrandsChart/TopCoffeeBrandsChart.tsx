@@ -1,5 +1,4 @@
 import { useMemo, useState, useCallback, useEffect } from 'react';
-import { Box } from '@mui/material';
 import { BarChart, DonutChart } from '../../molecules/charts';
 import type { iBarChartData } from '../../../types/chart.type';
 import { createBarChartOption, createInitialBarLegendItems } from '../../../utils/barChartOption';
@@ -78,16 +77,16 @@ export const TopCoffeeBrandsChart: React.FC<TopCoffeeBrandsChartProps> = ({ data
     }, [data, donutLegendItems]);
 
     if (loading) {
-        return <Box sx={{ p: 3, textAlign: 'center' }}>Loading...</Box>;
+        return <div className="p-6 text-center">Loading...</div>;
     }
 
     if (!data || data.length === 0) {
-        return <Box sx={{ p: 3, textAlign: 'center' }}>No data available for Top Coffee Brands</Box>;
+        return <div className="p-6 text-center">No data available for Top Coffee Brands</div>;
     }
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3 }}>
-            <Box sx={{ flex: 1 }}>
+        <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1">
                 <BarChart
                     option={barOption}
                     title="Top Coffee Brands - Bar Chart"
@@ -97,8 +96,8 @@ export const TopCoffeeBrandsChart: React.FC<TopCoffeeBrandsChartProps> = ({ data
                     onColorChange={handleBarColorChange}
                     hasData={data.length > 0}
                 />
-            </Box>
-            <Box sx={{ flex: 1 }}>
+            </div>
+            <div className="flex-1">
                 <DonutChart
                     option={donutOption}
                     title="Top Coffee Brands - Donut Chart"
@@ -108,8 +107,8 @@ export const TopCoffeeBrandsChart: React.FC<TopCoffeeBrandsChartProps> = ({ data
                     onColorChange={handleDonutColorChange}
                     hasData={data.length > 0}
                 />
-            </Box>
-        </Box>
+            </div>
+        </div>
     );
 };
 
